@@ -15,6 +15,7 @@ namespace _2DFancyTools
     {
         string fileName = "";
         int generation = 0, randFrom = 0, randTo = 0;
+        List<string> systemRules = null;
 
         public FormFractal()
         {
@@ -79,6 +80,39 @@ namespace _2DFancyTools
             generation = Int32.Parse(textBoxChangeGeneration.Text);
             randFrom = Int32.Parse(textBoxRandomFrom.Text);
             randTo = Int32.Parse(textBoxRandomTo.Text);
+
+            //получаем данные из файла
+            try
+            {
+                StreamReader sr = new StreamReader(fileName);
+                string line = sr.ReadLine();
+                string[] parseLine = line.Split(' ');
+                string state = parseLine[0];
+                int rotate = Int32.Parse(parseLine[1]);
+                string direction = parseLine[2];
+
+                line = sr.ReadLine();
+                while (line != null)
+                {
+                    systemRules.Add(line);
+                    line = sr.ReadLine();
+                }
+                sr.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception: " + ex.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Executing finally block.");
+            }
+
+            DrawFractal();
+        }
+
+        private void DrawFractal()
+        {
 
         }
     }
