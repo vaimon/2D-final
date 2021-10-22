@@ -191,7 +191,6 @@ namespace _2DFancyTools
             if (fileName == "..\\..\\..\\L-systems\\ШирокоеДерево.txt")
                 width = 14; // для красоты с:
 
-
             foreach (char lex in rule)
             {
                 if (lex == 'F')
@@ -217,8 +216,6 @@ namespace _2DFancyTools
                     st.Push(Tuple.Create(point, angle));
                     if (fileName.Contains("Дерево") || fileName.Contains("Куст"))
                     {
-                        flagGr = true;
-                        flagBr = false;
                         color = color.G + 40 > 255 ? Color.FromArgb(color.R, 255, color.B) : Color.FromArgb(color.R, color.G + 40, color.B);
                         width--;
                     }
@@ -230,8 +227,6 @@ namespace _2DFancyTools
                     angle = tuple.Item2;
                     if (fileName.Contains("Дерево") || fileName.Contains("Куст"))
                     {
-                        flagGr = false;
-                        flagBr = true;
                         color = color.G - 40 < 0 ? Color.FromArgb(color.R, 0, color.B) : Color.FromArgb(color.R, color.G - 40, color.B);
                         width++;
                     }
