@@ -185,12 +185,12 @@ namespace _2DFancyTools
             int count = 0;
             int stepColor = generation == 0 ? 255 / generation : 255 / generation+1;
             Color color = Color.FromArgb(64, 0, 0);
+            Dictionary<PointF, Tuple<Color, float>> gr = new Dictionary<PointF, Tuple<Color, float>>(), br = new Dictionary<PointF, Tuple<Color, float>>();
+
             float width = 7;
             if (fileName == "..\\..\\..\\L-systems\\ШирокоеДерево.txt")
-                width = 14;
-            bool flagGr = false, flagBr = false;
-            //List<int> indPlus = new List<int>(), indMinus = new List<int>();
-            Dictionary<PointF, Tuple<Color, float>> gr = new Dictionary<PointF, Tuple<Color, float>>(), br = new Dictionary<PointF, Tuple<Color, float>>();
+                width = 14; // для красоты с:
+
 
             foreach (char lex in rule)
             {
@@ -200,17 +200,10 @@ namespace _2DFancyTools
                     float nextX = (float)(point.X + Math.Cos(angle)), nextY = (float)(point.Y + Math.Sin(angle));
                     points.Add(Tuple.Create(point, new PointF(nextX, nextY)));
 
-                    /* if (flagGr)
-                         gr[point] = new Tuple<Color, float>(color, width);
-                     else if (flagBr)
-                         br[point] = new Tuple<Color, float>(color, width);
-                     else if (fileName == "..\\..\\..\\L-systems\\Дерево.txt" || fileName == "..\\..\\..\\L-systems\\Куст.txt")
-                         br[point] = new Tuple<Color, float>(Color.FromArgb(64, 0, 0), 10); */
                     if (fileName.Contains("Дерево") || fileName.Contains("Куст"))
                     {
                         if (count < 3)
                         {
-                            //color = color.G + 20 < 0 ? Color.FromArgb(color.R + 3, 0, color.B) : Color.FromArgb(color.R + 3, color.G + 20, color.B);
                             width--;
                             count++;
                         }
@@ -226,12 +219,9 @@ namespace _2DFancyTools
                     {
                         flagGr = true;
                         flagBr = false;
-                        //color = color.G + stepColor > 255 ? Color.FromArgb(color.R - 3, 255, color.B) : Color.FromArgb(color.R - 3, color.G + stepColor, color.B);
                         color = color.G + 40 > 255 ? Color.FromArgb(color.R, 255, color.B) : Color.FromArgb(color.R, color.G + 40, color.B);
-                        //width -= 2;
                         width--;
                     }
-                    //count++;
                 }
                 else if (lex == ']')
                 {
@@ -242,9 +232,7 @@ namespace _2DFancyTools
                     {
                         flagGr = false;
                         flagBr = true;
-                        //color = color.G - stepColor < 0 ? Color.FromArgb(color.R + 3, 0, color.B) : Color.FromArgb(color.R + 3, color.G - stepColor, color.B);
                         color = color.G - 40 < 0 ? Color.FromArgb(color.R, 0, color.B) : Color.FromArgb(color.R, color.G - 40, color.B);
-                        //width += 2;
                         width++;
                     }
                 }
@@ -283,48 +271,13 @@ namespace _2DFancyTools
             if (fileName.Contains("Дерево") || fileName.Contains("Куст"))
             {
                 for (int i = 0; i < points.Count(); ++i)
-                {
-                    //if (gr.ContainsKey(points[i].Item1))
-                        g.DrawLine(new Pen(gr[points[i].Item1].Item1, gr[points[i].Item1].Item2), scalePoints[i].Item1, scalePoints[i].Item2);
-                 /*   else if (br.ContainsKey(points[i].Item1))
-                        g.DrawLine(new Pen(br[points[i].Item1].Item1, br[points[i].Item1].Item2), points[i].Item1, points[i].Item2);*/
-                    //else
-                     //   g.DrawLine(new Pen(Color.Black), scalePoints[i].Item1, scalePoints[i].Item2);
-                }
+                    g.DrawLine(new Pen(gr[points[i].Item1].Item1, gr[points[i].Item1].Item2), scalePoints[i].Item1, scalePoints[i].Item2);
             }
             else
                 for (int i = 0; i < points.Count(); ++i)
                     g.DrawLine(new Pen(Color.Black), scalePoints[i].Item1, scalePoints[i].Item2);
 
             pictureBox1.Invalidate();
-
-
-            // выводим фрактал
-            /*    if (fileName == "..\\..\\..\\L-systems\\Дерево.txt" || fileName == "..\\..\\..\\L-systems\\Куст.txt")
-                {
-                    Color color = Color.Brown;
-                    float width = 10;
-                    int c = points.Count() / count;
-                    for (int i = 0; i < points.Count(); ++i)
-                    {
-                        c--;
-                        if (c == 0)
-                        {
-                            c = points.Count() / count;
-                            width--;
-                            color = Color.FromArgb(color.R, color.G + c-1, color.B);
-                        }
-                        g.DrawLine(new Pen(color, width), points[i].Item1, points[i].Item2);
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < points.Count(); ++i)
-                    {
-                        g.DrawLine(new Pen(Color.Black), points[i].Item1, points[i].Item2);
-                        pictureBox1.Invalidate();
-                    }
-                } */
         }
     }  
 }
