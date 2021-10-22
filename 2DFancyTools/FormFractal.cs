@@ -38,16 +38,16 @@ namespace _2DFancyTools
                     fileName = "..\\..\\..\\L-systems\\СнежинкаКоха.txt";
                     break;
                 case 2:
-                    fileName = "..\\..\\..\\L-systems\\СнежинкаКоха.txt";
+                    fileName = "..\\..\\..\\L-systems\\ТреугольникСерпинского.txt";
                     break;
                 case 3:
                     fileName = "..\\..\\..\\L-systems\\КоверСерпинского.txt";
                     break;
                 case 4:
-                    fileName = "..\\..\\..\\L-systems\\НаконечникСерпинского.txt";
+                    fileName = "..\\..\\..\\L-systems\\КоверСерпинского.txt";
                     break;
                 case 5:
-                    fileName = "..\\..\\..\\L-systems\\НаконечникСерпинского.txt";
+                    fileName = "..\\..\\..\\L-systems\\КриваяГильберта.txt";
                     break;
                 case 6:
                     fileName = "..\\..\\..\\L-systems\\КриваяДракона.txt";
@@ -61,21 +61,21 @@ namespace _2DFancyTools
         private void textBoxChangeGeneration_KeyPress(object sender, KeyPressEventArgs e)
         {
             char el = e.KeyChar;
-            if (!Char.IsDigit(el) && el != (char)Keys.Back)
+            if (!Char.IsDigit(el) && el != (char)Keys.Back) // можно вводить только цифры и стирать
                 e.Handled = true;
         }
 
         private void textBoxRandomFrom_KeyPress(object sender, KeyPressEventArgs e)
         {
             char el = e.KeyChar;
-            if (!Char.IsDigit(el) && el != (char)Keys.Back && el != '-')
+            if (!Char.IsDigit(el) && el != (char)Keys.Back && el != '-') // можно вводить только цифры, минус и стирать
                 e.Handled = true;
         }
 
         private void textBoxRandomTo_KeyPress(object sender, KeyPressEventArgs e)
         {
             char el = e.KeyChar;
-            if (!Char.IsDigit(el) && el != (char)Keys.Back && el != '-')
+            if (!Char.IsDigit(el) && el != (char)Keys.Back && el != '-') // можно вводить только цифры, минус и стирать
                 e.Handled = true;
         }
 
@@ -92,12 +92,13 @@ namespace _2DFancyTools
             pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             g = Graphics.FromImage(pictureBox1.Image);
 
+            // если окна с изменением поколения и случайности пустые, то = 0
             generation = textBoxChangeGeneration.Text != "" ? Int32.Parse(textBoxChangeGeneration.Text) : 0;
             randFrom = textBoxRandomFrom.Text != "" ? Int32.Parse(textBoxRandomFrom.Text) : 0;
             randTo = textBoxRandomTo.Text != "" ? Int32.Parse(textBoxRandomTo.Text) : 0;
+
             string axiom = "", direction = "";
             float rotate = 0;
-
             //получаем данные из файла
             try
             {
@@ -146,13 +147,13 @@ namespace _2DFancyTools
             // выводим одно общее правило построения для указанного поколения
             for (int i = 0; i < generation; ++i)
             {
-                StringBuilder seq = new StringBuilder("");
-                foreach (char symbol in rule)
-                    if (systemRules.ContainsKey(symbol))
-                        seq.Append(systemRules[symbol]);
+                string seq = "";
+                foreach (char lex in rule)
+                    if (systemRules.ContainsKey(lex))
+                        seq += systemRules[lex];
                     else
-                        seq.Append(symbol);
-                rule = seq.ToString();
+                        seq += lex;
+                rule = seq;
             }
 
             float angle = 0;
@@ -171,7 +172,7 @@ namespace _2DFancyTools
             }
 
             rot = rot * (float)Math.PI / 180; // градусы в радианы
-            PointF point = new PointF(0, 0), next_point = new PointF(0, 0);
+            PointF point = new PointF(0, 0);
             Random rand = new Random();
             int randRotate = 0;
 
@@ -210,11 +211,6 @@ namespace _2DFancyTools
             // шаг для масштабирования
             float step = Math.Min(pictureBox1.Width / (maxX - minX), pictureBox1.Height / (maxY - minY));
 
-        /*    var OY = (int)((-minX / (double)(maxX - minX)) * g.VisibleClipBounds.Width);
-            var OX = (int)((-minY / (double)(maxY - minY)) * g.VisibleClipBounds.Height);
-            var stepX = g.VisibleClipBounds.Width / (maxX - minX);
-            var stepY = g.VisibleClipBounds.Height / (maxY - minY);*/
-
             // масштабируем список точек
             for (int i = 0; i < points.Count(); i++)
             {
@@ -225,8 +221,7 @@ namespace _2DFancyTools
 
             // выводим фрактал
             for (int i = 0; i < points.Count(); ++i)
-            {
-                //g.DrawLine(Pens.Black, (int)(OY + points[i].Item1.X * stepX), (int)(OX + points[i].Item1.Y * stepY), (int)(OY + points[i].Item2.X * stepX), (int)(OX + points[i].Item2.Y * stepY));
+            {            
                 g.DrawLine(new Pen(Color.Black), points[i].Item1, points[i].Item2);
                 pictureBox1.Invalidate();
             }
