@@ -52,10 +52,12 @@ namespace _2DFancyTools
             "Снежинка Коха",
             "Треугольник Серпинского",
             "Ковер Серпинского",
-            "Ковер Серпинского",
+            "Шестиугольная кривая Госпера",
             "Кривая Гильберта",
             "Кривая Дракона",
-            "Шестиугольная кривая Госпера"});
+            "Высокое Дерево",
+            "Широкое Дерево",
+            "Куст"});
             this.ComboBoxLSystemChange.Location = new System.Drawing.Point(11, 66);
             this.ComboBoxLSystemChange.Name = "ComboBoxLSystemChange";
             this.ComboBoxLSystemChange.Size = new System.Drawing.Size(199, 23);
