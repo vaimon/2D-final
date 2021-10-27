@@ -68,7 +68,7 @@ namespace _2DFancyTools
         void DrawMountain()
         {
             g.Clear(Color.White);
-            r = double.Parse(comboBox1.Text);//коэфф шероховатости зададим сами
+            r = double.Parse(comboBox1.SelectedItem.ToString());//коэфф шероховатости зададим сами
                                             // n= double.Parse(textBox2.Text);//глубина рекурсии задается пользователем
             n = trackBar1.Value;
 
@@ -125,19 +125,19 @@ namespace _2DFancyTools
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (!drawingMode)
-            {
-                button3.Visible = false;
-            }
-            else
-            {
+           // if (!drawingMode)
+            //{
+              //  button3.Visible = false;
+            //}
+            //else
+            //{
                 g.Clear(Color.White);
                 polygonPoints.Clear();
                 Mountains.Clear();
                 //textBox1.Clear();
 
                 drawingMode = false;
-            }
+            //}
 
         }
         private void trackBar1_Scroll(object sender, EventArgs e)
