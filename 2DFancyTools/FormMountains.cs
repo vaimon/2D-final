@@ -10,18 +10,7 @@ using System.Windows.Forms;
 
 namespace _2DFancyTools
 {
-    class segment
-    {
-        public Point l;
-        public Point r;
-        public
-        segment(Point p1, Point p2)
-        {
-            l = p1;
-            r = p2;
-        }
 
-    };
 
     public partial class FormMountains : Form
     {
@@ -32,8 +21,10 @@ namespace _2DFancyTools
         //Реализовать алгоритм midpoint displacement для двумерной визуализации горного массива.
         {
             InitializeComponent();
+            trackBar1.Scroll += trackBar1_Scroll;
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             g = canvas.CreateGraphics();
-           canvas.Image = new Bitmap(1300, 900);
+            canvas.Image = new Bitmap(1300, 900);
             drawingMode = false;
         }
         List<Point> polygonPoints = new List<Point>();
@@ -46,27 +37,27 @@ namespace _2DFancyTools
         Pen blackPen = new Pen(Color.Black, 3);
         Pen blackPen2 = new Pen(Color.Black, 1);
         Graphics g;
-        
+
         void drawPoint(MouseEventArgs e)
         {
-            
-            
+
+
             polygonPoints.Add(e.Location);
             if (polygonPoints.Count == 2)
                 Mountains.Add(new segment(polygonPoints[0], polygonPoints[1]));
             g.FillEllipse(blackBrush, e.X - 3, e.Y - 3, 7, 7);
-            
-           //setFlags(isAffineTransformationsEnabled: true);
+
+            //setFlags(isAffineTransformationsEnabled: true);
         }
-         void canvas_MouseClick(object sender, MouseEventArgs e)
+        void canvas_MouseClick(object sender, MouseEventArgs e)
         {
             if (drawingMode)
             {
-                
-               drawPoint(e); 
-                
+
+                drawPoint(e);
+
             }
-           
+
 
         }
 
@@ -76,10 +67,12 @@ namespace _2DFancyTools
         }
         void DrawMountain()
         {
-            r = double.Parse(textBox1.Text);//коэфф шероховатости зададим сами
-            n= double.Parse(textBox2.Text);//глубина рекурсии задается пользователем
-            
-            
+            g.Clear(Color.White);
+            r = double.Parse(comboBox1.SelectedItem.ToString());//коэфф шероховатости зададим сами
+                                            // n= double.Parse(textBox2.Text);//глубина рекурсии задается пользователем
+            n = trackBar1.Value;
+
+
             for (int j = 1; j <= (int)n; j++)
             {
                 Random rnd = new Random();
@@ -88,9 +81,14 @@ namespace _2DFancyTools
                 {
                     Point left = x.l;
                     Point right = x.r;
-                    int i = Math.Abs(left.X - right.X);
+                     double i = Math.Abs(left.X - right.X)* Math.Abs(left.X - right.X) + Math.Abs(left.Y - right.Y) * Math.Abs(left.Y - right.Y);
+                    i = Math.Sqrt(i);
                     int c = (left.X + right.X) / 2;
-                    double y = (left.Y + right.Y) / 2 + rnd.Next((int)(-r * i), (int)(r * i));
+                    double y = (left.Y + right.Y) / 2 + (rnd.NextDouble() - 0.5)*r * i;
+                    //if (y > canvas.Size.Height)
+                       // y = canvas.Size.Height;
+                   // if (y < 0)
+                       // y = 0;
                     Point center = new Point(c, (int)y);
                     drawpoints.Add(new segment(left, center));
                     drawpoints.Add(new segment(center, right));
@@ -122,24 +120,46 @@ namespace _2DFancyTools
         private void button2_Click(object sender, EventArgs e)
         {
             DrawMountain();
+
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (!drawingMode)
-            {
-                button3.Visible = false;
-            }
-            else
-            {
+           // if (!drawingMode)
+            //{
+              //  button3.Visible = false;
+            //}
+            //else
+            //{
                 g.Clear(Color.White);
                 polygonPoints.Clear();
                 Mountains.Clear();
-                textBox1.Clear();
-                textBox2.Clear();
+                //textBox1.Clear();
+
                 drawingMode = false;
-            }
+            //}
 
         }
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            label2.Text = String.Format("Глубина рекурсии: {0}", trackBar1.Value);
+        }
+        void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedState = comboBox1.SelectedItem.ToString();
+           // r = double.Parse(selectedState);
+        }
     }
+    class segment
+    {
+        public Point l;
+        public Point r;
+        public
+        segment(Point p1, Point p2)
+        {
+            l = p1;
+            r = p2;
+        }
+
+    };
 }
